@@ -1,62 +1,7 @@
 Bugs in libdmtx
 -----------------------------------------------------------------
 
-1. libdtmx - Core Library
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-While regular encoder works fine, the optimizer feature (--best)
-still occasionally generates codeword sequences that are not 100%
-legal according to the ISO specification.  Everything still
-appears to decode properly, but until I have time to go through
-every corner case and validate the behavior this will be treated
-as an experimental feature.  For now dmtxwrite will encode using
-a straight ASCII scheme by default.
-
-Data Mosaic encoding doesn't produce output for certain sizes:
-
-   $ echo -n foo | dmtxwrite -M    <-- works
-   $ echo -n fooo | dmtxwrite -M   <-- doesn't work
-   $ echo -n foooo | dmtxwrite -M  <-- works
-
-
-2. dmtxread
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-The follow options are considered experimental:
-  -M,  --mosaic              interpret as Data Mosaic barcodes
-
-
-3. dmtxwrite
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-The follow options are considered experimental:
-  -eb, --encodation=b        best encodation (beta only)
-  -M,  --mosaic              create Data Mosaic (non-standard)
-
-The follow options are not implemented yet:
-  -ef, --encodation=f        fast encodation
-  -c,  --color=COLOR         barcode color
-  -b,  --bgcolor=COLOR       background color
-  -r,  --rotate=DEGREES      rotation angle
-
-
-4. Test Programs
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-multi_test:
-  * No known issues
-
-rotate_test:
-  * No known issues
-
-simple_test:
-  * No known issues
-
-unit_test:
-  * No known issues
-
-
-5. Wrappers
+1. Wrappers
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 cocoa wrapper:
@@ -78,7 +23,7 @@ ruby wrapper:
   * No known issues
 
 
-6. Scripts in the script directory
+2. Scripts in the script directory
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 The check_headers.pl script verifies that every function has

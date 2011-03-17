@@ -1,4 +1,4 @@
-# Packaging commands (all run from libdmtx root):
+# Packaging commands (all run from libdmtx-wrappers root):
 # $ make distclean
 # $ make dist-bzip2
 # $ make dist-gzip
@@ -7,41 +7,29 @@
 ACLOCAL_AMFLAGS = -I m4
 AM_CPPFLAGS = -Wshadow -Wall -pedantic -ansi
 
-lib_LTLIBRARIES = libdmtx.la
-libdmtx_la_SOURCES = dmtx.c
-libdmtx_la_CFLAGS = -Wall -pedantic
-
-libdmtx_la_LIBADD =
-if CUSTOM_ENCODEDATAMATRIX
-libdmtx_la_LIBADD += customEncodeDataMatrix.lo
-endif
-if CUSTOM_ENCODEDATAMOSAIC
-libdmtx_la_LIBADD += customEncodeDataMosaic.lo
-endif
-if CUSTOM_DECODEMATRIXREGION
-libdmtx_la_LIBADD += customDecodeMatrixRegion.lo
-endif
-if CUSTOM_DECODEMOSAICREGION
-libdmtx_la_LIBADD += customDecodeMosaicRegion.lo
-endif
-if CUSTOM_REGIONFINDNEXT
-libdmtx_la_LIBADD += customRegionFindNext.lo
-endif
-if CUSTOM_REGIONSCANPIXEL
-libdmtx_la_LIBADD += customRegionScanPixel.lo
+if ENABLE_PHP
+   PHP_DIR = php
 endif
 
-EXTRA_libdmtx_la_SOURCES = dmtxdecode.c dmtxencode.c dmtximage.c dmtxmatrix3.c \
-	dmtxmessage.c dmtxplacemod.c dmtxreedsol.c dmtxregion.c dmtxscangrid.c \
-	dmtxstatic.h dmtxsymbol.c dmtxtime.c dmtxvector2.c dmtxencodestream.c \
-	dmtxencodestream.c dmtxencodesingle.c dmtxencodeoptimize.c dmtxencodeascii.c \
-	dmtxencodec40textx12.c dmtxencodeedifact.c dmtxencodebase256.c
+if ENABLE_PYTHON
+   PYTHON_DIR = python
+endif
 
-include_HEADERS = dmtx.h
+if ENABLE_RUBY
+   RUBY_DIR = ruby
+endif
 
-SUBDIRS = . util test wrapper
+if ENABLE_VALA
+   VALA_DIR = vala
+endif
 
-dist_man_MANS = man/libdmtx.3 man/dmtxread.1 man/dmtxwrite.1 man/dmtxquery.1
+# Only include directories that were enabled at ./configure time
+SUBDIRS = . $(PHP_DIR) $(PYTHON_DIR) $(RUBY_DIR) $(VALA_DIR)
+
+# Force DIST_SUBDIRS equal to SUBDIRS. Otherwise "distclean" target will
+# break in unconfigured directories. This is allowed because all wrapper
+# directories (configured and unconfigured) are also listed in EXTRA_DIST.
+DIST_SUBDIRS = $(SUBDIRS)
 
 EXTRA_DIST = KNOWNBUG \
 	README.cygwin \
@@ -52,7 +40,6 @@ EXTRA_DIST = KNOWNBUG \
 	README.unix \
 	README.visualc \
 	m4 \
-	project \
 	script/check_all.sh \
 	script/check_comments.sh \
 	script/check_copyright.sh \
@@ -63,7 +50,6 @@ EXTRA_DIST = KNOWNBUG \
 	script/check_todo.sh \
 	script/check_whitespace.sh \
 	script/dist-image.sh \
-	test/rotate_test/images/test_image??.png \
 	wrapper/cocoa/* \
 	wrapper/java/* \
 	wrapper/net/* \
@@ -71,6 +57,3 @@ EXTRA_DIST = KNOWNBUG \
 	wrapper/python/* \
 	wrapper/ruby/* \
 	wrapper/vala/*
-
-pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = libdmtx.pc
