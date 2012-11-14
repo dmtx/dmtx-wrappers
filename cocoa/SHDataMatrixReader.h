@@ -21,14 +21,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 /* $Id$ */
 
-#if TARGET_OS_IPHONE
-#import <UIKit/UIKit.h>
-#else
+#if ! TARGET_OS_IPHONE
 #import <Cocoa/Cocoa.h>
 #endif
 
 @interface SHDataMatrixReader : NSObject {
-
+    
 }
 #pragma mark Allocation
 + (id)sharedDataMatrixReader;
