@@ -54,10 +54,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	return self;
 }
 
-- (void)dealloc {
-	[super dealloc];
-}
-
 #pragma mark Instance
 #if TARGET_OS_IPHONE
 - (NSString *)decodeBarcodeFromImage:(UIImage *)image {
@@ -69,11 +65,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
     NSData * imageData = [self _ARGB8DataForImage:image];
 	// Create dmtx image.
-	DmtxImage *dmtxImage = dmtxImageCreate([imageData bytes], 500, 500, DmtxPack32bppXRGB);
-	if(dmtxImage == NULL) {
-        [imageData release];
+	DmtxImage *dmtxImage = dmtxImageCreate((unsigned char*)[imageData bytes], 500, 500, DmtxPack32bppXRGB);
+	if(dmtxImage == NULL)
 		return nil;
-    }
 
 	// Initialize dmtx decode struct for image.
 	DmtxDecode *dmtxDecode = dmtxDecodeCreate(dmtxImage, 1);
@@ -95,7 +89,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 		if(dmtxMessage != NULL) {
 			// Convert C string to NSString.
-			NSString *message = [NSString stringWithCString:(const char*)dmtxMessage->output length:(NSUInteger)dmtxMessage->outputIdx];
+            NSString *message = [[NSString alloc] initWithBytes:dmtxMessage->output length:(NSUInteger)dmtxMessage->outputIdx encoding:NSASCIIStringEncoding];
 			[messages addObject:message];
 
 			// Free dmtx message memory.
@@ -184,5 +178,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 	return imageData;
 }
+
+#if ! __has_feature(objc_arc)
+- (void)dealloc {
+    [super dealloc];
+}
+#endif
 
 @end
