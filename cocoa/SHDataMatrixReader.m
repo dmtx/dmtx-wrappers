@@ -67,7 +67,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	// Create dmtx image.
 	DmtxImage *dmtxImage = dmtxImageCreate((unsigned char*)[imageData bytes], 500, 500, DmtxPack32bppXRGB);
 	if(dmtxImage == NULL)
+    {
+#if ! __has_feature(objc_arc)
+        [imageData release];
+#endif
 		return nil;
+    }
 
 	// Initialize dmtx decode struct for image.
 	DmtxDecode *dmtxDecode = dmtxDecodeCreate(dmtxImage, 1);
