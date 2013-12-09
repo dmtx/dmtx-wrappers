@@ -35,7 +35,7 @@ static VALUE rdmtx_decode(VALUE self, VALUE image /* Image from RMagick (Magick:
 
     VALUE safeImageString = StringValue(rawImageString);
 
-    char * imageBuffer = RSTRING(safeImageString)->ptr;
+    char * imageBuffer = RSTRING_PTR(safeImageString);
 
     int width = NUM2INT(rb_funcall(image, rb_intern("columns"), 0));
     int height = NUM2INT(rb_funcall(image, rb_intern("rows"), 0));
@@ -90,8 +90,8 @@ static VALUE rdmtx_encode(VALUE self, VALUE string) {
     dmtxEncodeSetProp(enc, DmtxPropSizeRequest, DmtxSymbolSquareAuto);
 
     /* Create barcode image */
-    if (dmtxEncodeDataMatrix(enc, RSTRING(safeString)->len,
-            (unsigned char *)RSTRING(safeString)->ptr) == DmtxFail) {
+    if (dmtxEncodeDataMatrix(enc, RSTRING_LEN(safeString),
+            (unsigned char *)RSTRING_PTR(safeString)) == DmtxFail) {
 //        printf("Fatal error !\n");
         dmtxEncodeDestroy(&enc);
         return Qnil;
