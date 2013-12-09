@@ -10,11 +10,7 @@ NATIVE_C=native/org_libdmtx_DMTXImage.c
 NATIVE_H=native/org_libdmtx_DMTXImage.h
 NATIVE_SO=native/libdmtx.so
 
-LIBDMTX_LA=../../libdmtx_la-dmtx.o
 CFLAGS=-shared -fpic
-INCLUDE=-I ../.. \
-	-I /usr/lib/jvm/java-1.6.0-openjdk/include \
-	-I /usr/lib/jvm/java-1.6.0-openjdk/include/linux
 
 GENERATED=$(IMAGE_CLASS) $(TAG_CLASS) $(NATIVE_SO) $(DMTX_JAR)
 
@@ -28,11 +24,8 @@ check: $(GENERATED)
 clean:
 	rm -f $(GENERATED) GUIExample.class CLIExample.class
 
-$(LIBDMTX_LA):
-	make libdmtx.la -C ../..
-
-$(NATIVE_SO): $(NATIVE_C) $(NATIVE_H) $(LIBDMTX_LA)
-	gcc $(NATIVE_C) $(CFLAGS) -o $(NATIVE_SO) $(INCLUDE) $(LIBDMTX_LA)
+$(NATIVE_SO): $(NATIVE_C) $(NATIVE_H)
+	gcc $(NATIVE_C) $(CFLAGS) -o $(NATIVE_SO)
 
 $(IMAGE_CLASS) $(TAG_CLASS): $(IMAGE_JAVA) $(TAG_JAVA)
 	javac org/libdmtx/DMTXImage.java
