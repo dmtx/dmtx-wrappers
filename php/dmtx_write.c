@@ -34,7 +34,9 @@ int le_dmtx_image;
 
 ZEND_DECLARE_MODULE_GLOBALS(dmtx)
 
-static function_entry dmtx_functions[] = {
+//not working ii php 5.4 and above
+//static function_entry dmtx_functions[] = {
+static zend_function_entry dmtx_functions[] = {
    PHP_FE(dmtx_write, NULL)
    PHP_FE(dmtx_getRow, NULL)
    PHP_FE(dmtx_getSize, NULL)
